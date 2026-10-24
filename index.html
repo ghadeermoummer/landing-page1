@@ -1,0 +1,680 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>متجر حِرفة</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;600;700&display=swap">
+<style>
+:root{
+  /* Layout: RTL one-page storefront. Three ordered steps on the right, sticky order summary on the left.
+     The stepped tatreez diamond (from the Hirfa deck) is the only ornament. Palette is the project's own. */
+  --bg:#f5ebdc; --surface:#fbf6ee; --surface-2:#eadfcb; --line:#dccdb5;
+  --fg:#3b2a2f; --muted:#6e5e5c;
+  --wine:#76263d; --wine-fill:#76263d; --on-wine:#fbf3e6;
+  --olive:#596040; --olive-fill:#626842; --on-olive:#fbf3e6; --olive-soft:#dfe1cb;
+  --warn:#8a4b0f; --warn-bg:#f3e0c4; --err:#a02a2a; --ring:#76263d;
+  --font-display:'Reem Kufi','IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
+  --font-body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
+  --r:8px; --r-lg:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1d0e14; --surface:#2a1620; --surface-2:#35202a; --line:#4a2d39;
+    --fg:#f2e5d4; --muted:#bba59d;
+    --wine:#e592ac; --wine-fill:#8d3150; --on-wine:#fff4e6;
+    --olive:#b4bb88; --olive-fill:#5a6040; --on-olive:#f6f0e0; --olive-soft:#2a2f1e;
+    --warn:#e8b36a; --warn-bg:#3a2a14; --err:#f19090; --ring:#e592ac;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1d0e14; --surface:#2a1620; --surface-2:#35202a; --line:#4a2d39;
+  --fg:#f2e5d4; --muted:#bba59d;
+  --wine:#e592ac; --wine-fill:#8d3150; --on-wine:#fff4e6;
+  --olive:#b4bb88; --olive-fill:#5a6040; --on-olive:#f6f0e0; --olive-soft:#2a2f1e;
+  --warn:#e8b36a; --warn-bg:#3a2a14; --err:#f19090; --ring:#e592ac;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.75 var(--font-body);direction:rtl;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{font-family:var(--font-display);line-height:1.3;margin:0;text-wrap:balance;font-weight:600}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.in{max-width:1120px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+[id]{scroll-margin-top:12px}
+
+/* tatreez motif (mask is injected as --motif by script) */
+.mark{display:inline-block;flex:none;width:28px;height:28px;background:currentColor;-webkit-mask:var(--motif) center/contain no-repeat;mask:var(--motif) center/contain no-repeat}
+.band{height:40px;background:currentColor;color:var(--wine);-webkit-mask:var(--motif) 0 0/40px 40px repeat-x;mask:var(--motif) 0 0/40px 40px repeat-x}
+
+/* header */
+.top{background:var(--surface);border-bottom:1px solid var(--line)}
+.topin{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--wine)}
+.brand-name{font:700 1.7rem/1 var(--font-display)}
+.brand-en{font-size:.85rem;color:var(--muted);letter-spacing:.08em}
+.top nav{display:flex;gap:4px 22px;min-width:0}
+.top nav a{text-decoration:none;font-weight:500;padding-block:6px;white-space:nowrap}
+.top nav a:hover{color:var(--wine)}
+.tag{margin-inline-start:auto;font-size:.82rem;font-weight:600;color:var(--olive);background:var(--olive-soft);padding:2px 12px;border-radius:4px}
+@media (min-width:760px){.top nav{margin-inline-start:auto}.tag{margin-inline-start:0}}
+@media (max-width:759px){.top nav{order:3;width:100%;overflow-x:auto}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 24px;border-radius:6px;border:2px solid transparent;font-weight:600;text-decoration:none;cursor:pointer;transition:background .15s,color .15s}
+.btn.primary{background:var(--wine-fill);color:var(--on-wine);border-color:var(--wine-fill)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--wine);border-color:var(--wine)}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.sm{min-height:42px;padding:0 16px;font-size:.95rem}
+.link{background:none;border:0;color:var(--wine);text-decoration:underline;cursor:pointer;min-height:42px;padding:0 4px}
+
+/* hero */
+.hero{display:grid;gap:32px;padding-block:40px 36px}
+@media (min-width:860px){.hero{grid-template-columns:1.05fr .95fr;align-items:center;gap:48px}}
+.eyebrow{font-size:.92rem;font-weight:600;color:var(--olive);margin-bottom:10px}
+.hero h1{font-size:clamp(2.1rem,5.6vw,3.6rem);color:var(--wine);font-weight:700}
+.lead{margin-top:16px;font-size:1.1rem;max-width:34em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.pills{display:flex;flex-wrap:wrap;gap:6px 22px;list-style:none;margin:28px 0 0;padding:0;font-size:.95rem;color:var(--muted)}
+.pills li::before,.bul li::before{content:"";display:inline-block;width:8px;height:8px;background:var(--olive);transform:rotate(45deg);margin-inline-end:10px}
+.boxview{margin:0;min-width:0}
+.bv{background:var(--surface-2);border:2px solid var(--olive-fill);border-radius:var(--r-lg);padding:12px}
+.bv-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:repeat(2,minmax(112px,auto));gap:8px}
+.tile{position:relative;overflow:hidden;min-width:0;padding:14px;border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;color:var(--on-wine)}
+.tile.big{grid-row:span 2}
+.t-wine{background:var(--wine-fill)}
+.t-olive{background:var(--olive-fill);color:var(--on-olive)}
+.t-soft{background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+.tile b{font:600 1.05rem/1.35 var(--font-display)}
+.tile small{opacity:.85;font-size:.8rem}
+.tile::after{content:"";position:absolute;top:8px;inset-inline-start:8px;width:34px;height:34px;background:currentColor;opacity:.28;-webkit-mask:var(--motif) center/contain no-repeat;mask:var(--motif) center/contain no-repeat}
+.boxview figcaption{margin-top:10px;font-size:.88rem;color:var(--muted)}
+
+/* flow */
+.flow{display:grid;gap:32px;grid-template-columns:minmax(0,1fr);padding-block:36px 56px}
+@media (min-width:960px){.flow{grid-template-columns:minmax(0,1fr) 340px;gap:40px;align-items:start}.sum{position:sticky;top:calc(16px + env(safe-area-inset-top,0px))}}
+.steps{display:grid;gap:48px;min-width:0}
+.sh{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+.n{flex:none;width:36px;height:36px;display:grid;place-items:center;background:var(--wine-fill);color:var(--on-wine);font:600 1.1rem var(--font-display);border-radius:4px}
+.sh h2{font-size:1.55rem}
+.sh p{color:var(--muted);font-size:.95rem}
+
+/* service cards */
+.svcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.svc{position:relative;display:block}
+.svc input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.svc-body{display:block;height:100%;background:transparent;border:2px solid var(--line);border-radius:var(--r);padding:16px 16px 18px;transition:border-color .15s,background .15s}
+.svc-body b{display:block;font:600 1.2rem var(--font-display);color:var(--wine);margin-bottom:6px;padding-inline-end:34px}
+.svc-body .d{display:block;font-size:.93rem;color:var(--muted)}
+.svc .tick{position:absolute;top:12px;inset-inline-end:12px;width:26px;height:26px;color:var(--wine);opacity:0;pointer-events:none;transition:opacity .15s}
+.svc input:checked + .svc-body{border-color:var(--wine);background:var(--surface)}
+.svc input:checked ~ .tick{opacity:1}
+.svc input:focus-visible + .svc-body{outline:3px solid var(--ring);outline-offset:2px}
+
+/* preset boxes */
+.presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.pb{display:flex;flex-direction:column;gap:12px;min-width:0;background:var(--surface);border:2px solid var(--line);border-radius:var(--r-lg);padding:18px;transition:border-color .15s,transform .15s;box-shadow:0 3px 12px #3b2a2f0a}.pb:hover{transform:translateY(-2px)}.pb .pb-art{display:flex;align-items:center;justify-content:center;min-height:112px;border-radius:7px;background:var(--surface-2);color:var(--wine);font-size:2.5rem;position:relative;overflow:hidden}.pb .pb-art:after{content:"";position:absolute;inset:0;background:var(--motif) 12px 12px/34px 34px repeat;opacity:.10;pointer-events:none}.pb .pb-items{display:flex;flex-wrap:wrap;gap:6px}.pb .pb-items span{font-size:.82rem;background:var(--surface-2);border:1px solid var(--line);padding:3px 8px;border-radius:4px}.pb.on{box-shadow:0 0 0 1px var(--wine),0 8px 20px #3b2a2f12}
+.pb.on{border-color:var(--wine)}
+.pb h3{font-size:1.25rem;color:var(--wine)}
+.pb .t{color:var(--muted);font-size:.9rem}
+.pb ul{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:.95rem;flex:1}
+.pb li{border-bottom:1px dashed var(--line);padding-block:3px}
+.price{font:600 1.4rem var(--font-display);font-variant-numeric:tabular-nums}
+.price small,.pr small{font:400 .85rem var(--font-body);color:var(--muted)}
+.acts{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+
+/* builder */
+.seed{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:18px}
+.seed>span{font-weight:500}
+.chip{min-height:42px;padding:0 14px;border:1.5px solid var(--line);background:var(--surface);border-radius:4px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--olive-fill);color:var(--on-olive);border-color:var(--olive-fill)}
+.bud{margin-bottom:18px}
+.bud label{display:block;font-weight:500;margin-bottom:6px}
+.bud input{width:100%;max-width:240px}
+.meter{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;margin-top:10px;max-width:360px}
+.meter i{display:block;height:100%;width:0;background:var(--olive-fill);transition:width .2s}
+.meter.over i{background:var(--warn)}
+.hint{color:var(--muted);font-size:.88rem;margin-top:6px}
+.cap{margin-bottom:18px}
+.slots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;max-width:360px;margin-bottom:6px}
+.slots i{aspect-ratio:1;border:1.5px dashed var(--line);border-radius:3px}
+.slots i.on{border-style:solid}
+.slots i.f{background:var(--olive-fill);border-color:var(--olive-fill)}
+.slots i.h{background:var(--wine-fill);border-color:var(--wine-fill)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.plist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding-block:10px;border-bottom:1px solid var(--line)}
+.nm{min-width:0}
+.nm b{font-weight:500;display:block}
+.nm small{color:var(--muted);font-size:.84rem}
+.pr{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stp{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:6px;background:var(--surface)}
+.stp button{width:40px;height:40px;background:none;border:0;font-size:1.35rem;color:var(--wine);cursor:pointer;line-height:1}
+.stp button:disabled{opacity:.3;cursor:not-allowed}
+.stp output{min-width:28px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* form */
+form{min-width:0}
+.grp{border:0;padding:0;margin:0 0 26px;min-width:0;display:grid;gap:14px}
+.grp[hidden]{display:none}
+.grp legend{padding:0;margin-bottom:10px;font:600 1.1rem var(--font-display);color:var(--olive);float:none}
+.fld label,.lbl{display:block;font-weight:500;margin-bottom:6px}
+input[type="text"],input[type="number"],input[type="email"],select,textarea,#budget{width:100%;min-height:46px;padding:8px 12px;border:1.5px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+textarea{min-height:92px;resize:vertical}
+[aria-invalid="true"]{border-color:var(--err)!important}
+.err{color:var(--err);font-size:.88rem;margin-top:4px}
+.two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1.5px solid var(--line);border-radius:6px;background:var(--surface);cursor:pointer}
+.opt input{accent-color:var(--wine);margin:5px 0 0;width:18px;height:18px;flex:none}
+.note{background:var(--warn-bg);color:var(--warn);padding:10px 12px;border-radius:6px;font-size:.92rem}
+.submit{display:grid;gap:8px;justify-items:start}
+.cnt{font-size:.82rem;color:var(--muted);margin-top:4px}
+
+/* confirmation */
+.okbox{background:var(--olive-soft);border-radius:var(--r-lg);padding:24px;display:grid;gap:14px;justify-items:start}
+.okbox .mark{width:36px;height:36px;color:var(--olive)}
+.okbox h3{font-size:1.4rem;color:var(--olive)}
+
+/* summary */
+.sum{min-width:0;background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:18px}
+.sum h2{font-size:1.2rem;color:var(--wine);margin-bottom:12px}
+.svcline{display:inline-block;background:var(--olive-soft);color:var(--olive);padding:2px 10px;border-radius:4px;font-size:.88rem;font-weight:600;margin-bottom:8px}
+.bn{font:600 1.05rem var(--font-display);margin-bottom:6px}
+.lines{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:4px;font-size:.95rem;width:100%}
+.lines li{display:flex;justify-content:space-between;gap:10px;font-variant-numeric:tabular-nums}
+.sr{display:flex;justify-content:space-between;gap:10px;padding-block:8px;border-top:1px solid var(--line);font-size:.95rem;font-variant-numeric:tabular-nums}
+.sr.total{font-weight:600;font-size:1.1rem;color:var(--wine)}
+.small{font-size:.85rem;color:var(--muted);margin-top:8px}
+.empty{display:grid;gap:10px;justify-items:start;color:var(--muted)}
+.empty .mark{color:var(--olive);width:34px;height:34px}
+
+/* mobile order bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border-top:1.5px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.bar span{display:block;font-size:.8rem;color:var(--muted);line-height:1.3}
+.bar strong{font:600 1.15rem var(--font-display);color:var(--wine);font-variant-numeric:tabular-nums}
+@media (min-width:960px){.bar{display:none!important}}
+
+/* sections below */
+.how,.trust{padding-block:8px 52px}
+.kick{font-size:.92rem;font-weight:600;color:var(--olive);margin-bottom:6px}
+.how h2,.trust h2{font-size:1.7rem;margin-bottom:18px}
+.hsteps{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));counter-reset:s}
+.hsteps li{counter-increment:s;background:var(--surface);border-top:4px solid var(--wine);padding:14px 16px 18px;min-width:0}
+.hsteps li::before{content:counter(s);display:block;font:600 .95rem var(--font-display);color:var(--olive);margin-bottom:2px}
+.hsteps b{display:block;font:600 1.1rem var(--font-display);color:var(--wine);margin-bottom:4px}
+.hsteps p{font-size:.95rem}
+.tcols{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.tc{min-width:0;padding:22px;border-radius:var(--r);background:var(--surface);border:1.5px solid var(--line)}
+.tc.soft{background:var(--olive-soft);border-color:transparent}
+.tc h3{font-size:1.2rem;color:var(--wine);margin-bottom:10px}
+.bul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+
+.foot{background:var(--wine-fill);color:var(--on-wine);padding-bottom:28px}
+.foot .band{color:var(--on-wine);opacity:.25;margin-bottom:22px}
+.foot p+p{margin-top:6px}
+.foot .fs{font-size:.9rem;opacity:.9}
+@media (max-width:959px){.foot{padding-bottom:96px}}
+</style>
+
+<div class="app" dir="rtl" lang="ar">
+
+<header class="top">
+  <div class="in topin">
+    <a class="brand" href="#top" aria-label="حِرفة، الصفحة الرئيسية">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="brand-name">حِرفة</span>
+      <span class="brand-en" lang="en" dir="ltr">Hirfa</span>
+    </a>
+    <nav aria-label="أقسام الصفحة">
+      <a href="#service">الخدمات</a>
+      <a href="#boxes">البوكسات</a>
+      <a href="#how">كيف يصل بوكسك</a>
+      <a href="#trust">الثقة والتوثيق</a>
+    </nav>
+    <span class="tag">نموذج أولي</span>
+  </div>
+</header>
+
+<section class="hero in" id="top">
+  <div>
+    <p class="eyebrow">مشروع تجاري اجتماعي</p>
+    <h1>من غزة، بنكهة غزة، لأهل غزة.</h1>
+    <p class="lead">بوكسات هدايا تجمع التراث الغزّي بدعم الحرفيات والأسر المنتجة. كل بوكس منتجات حقيقية من غزة، بمقابل مباشر لعمل من صنعها.</p>
+    <div class="cta">
+      <a class="btn primary" href="#service">ابدأ طلبك</a>
+      <a class="btn ghost" href="#boxes">شاهد البوكسات</a>
+    </div>
+    <ul class="pills">
+      <li>منتج حقيقي من غزة</li>
+      <li>فرصة بيع للحرفية</li>
+      <li>أثر اقتصادي واضح</li>
+    </ul>
+  </div>
+  <figure class="boxview">
+    <div class="bv">
+      <div class="bv-grid">
+        <div class="tile big t-olive"><b>زيت الزيتون</b><small>غذائي</small></div>
+        <div class="tile t-wine"><b>الزعتر والدقة</b><small>غذائي</small></div>
+        <div class="tile t-soft"><b>المعمول والكعك</b><small>غذائي</small></div>
+        <div class="tile t-soft"><b>مطرزات فلسطينية</b><small>حرف وتراث</small></div>
+        <div class="tile t-wine"><b>فخار مزخرف يدويًا</b><small>حرف وتراث</small></div>
+      </div>
+    </div>
+    <figcaption>مثال على ما يضمه بوكس واحد. المحتويات تتحدد بحسب التوفر الفعلي.</figcaption>
+  </figure>
+</section>
+<div class="band" aria-hidden="true"></div>
+
+<main class="in flow">
+  <div class="steps">
+
+    <section id="service">
+      <header class="sh">
+        <span class="n" aria-hidden="true">1</span>
+        <div><h2>اختر الخدمة</h2><p>كيف تريد أن تصل هديتك؟</p></div>
+      </header>
+      <div class="svcs" role="radiogroup" aria-label="الخدمة">
+        <label class="svc">
+          <input type="radio" name="svc" value="family" checked>
+          <span class="svc-body"><b>أهدي عيلتي</b><span class="d">اختَر بنفسك المنتجات الغذائية والحرفية التي تريد جمعها في بوكس واحد.</span></span>
+          <span class="mark tick" aria-hidden="true"></span>
+        </label>
+        <label class="svc">
+          <input type="radio" name="svc" value="distribute">
+          <span class="svc-body"><b>وزّعوا عني</b><span class="d">حدّد المنتجات التي تريدها وعدد البوكسات، وسنجهزها وفق اختياراتك والتوفر.</span></span>
+          <span class="mark tick" aria-hidden="true"></span>
+        </label>
+        <label class="svc">
+          <input type="radio" name="svc" value="custom">
+          <span class="svc-body"><b>صمّم على ذوقك</b><span class="d">خصص هديتك واختر المنتجات والكميات بما يناسب ذوقك وميزانيتك.</span></span>
+          <span class="mark tick" aria-hidden="true"></span>
+        </label>
+      </div>
+    </section>
+
+    <section id="boxes">
+      <header class="sh">
+        <span class="n" aria-hidden="true">2</span>
+        <div><h2 id="s2title">كوّن بوكسك</h2><p id="s2sub"></p></div>
+      </header>
+      <div id="presets" class="presets" hidden></div>
+      <div id="builder">
+        <div class="bud">
+          <label for="budget">ميزانيتك (اختياري)</label>
+          <input id="budget" type="text" placeholder="اكتب ميزانيتك التقريبية">
+        </div>
+        <p id="capMsg" class="hint" aria-live="polite"></p>
+        <div class="tabs" role="group" aria-label="تصفية المنتجات">
+          <button type="button" class="chip" data-act="filter" data-f="all" aria-pressed="true">الكل</button>
+          <button type="button" class="chip" data-act="filter" data-f="f" aria-pressed="false">منتجات غذائية بلدية</button>
+          <button type="button" class="chip" data-act="filter" data-f="h" aria-pressed="false">حرف ومنتجات تراثية</button>
+        </div>
+        <ul id="plist" class="plist"></ul>
+      </div>
+    </section>
+
+    <section id="order">
+      <header class="sh">
+        <span class="n" aria-hidden="true">3</span>
+        <div><h2>تفاصيل الطلب</h2><p>نحتاج بعض المعلومات لنؤكد معك التوفر والسعر والموعد.</p></div>
+      </header>
+
+      <form id="form" novalidate>
+        <fieldset class="grp">
+          <legend>بياناتك</legend>
+          <div class="two">
+            <div class="fld">
+              <label for="buyer">اسمك</label>
+              <input id="buyer" type="text" required autocomplete="name">
+              <p class="err" hidden>اكتب اسمك.</p>
+            </div>
+            <div class="fld">
+              <label for="contact">واتساب أو بريد إلكتروني</label>
+              <input id="contact" type="text" required dir="ltr" autocomplete="email" placeholder="name@example.com">
+              <p class="err" hidden>اكتب وسيلة تواصل لنؤكد معك الطلب.</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="grp" id="gDest" hidden>
+          <legend>وجهة الهدية</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="dest" value="in" checked><span>داخل غزة</span></label>
+            <label class="opt"><input type="radio" name="dest" value="out"><span>خارج غزة</span></label>
+          </div>
+          <p class="note" id="outNote" hidden>الشحن إلى الخارج يُؤكَّد بعد التحقق من متطلبات الدخول إلى بلد التسليم. لا نعد بموعد قبل ذلك.</p>
+        </fieldset>
+
+        <fieldset class="grp" id="gRecipient">
+          <legend>المستلم</legend>
+          <div class="two">
+            <div class="fld" id="fRec">
+              <label for="recName">اسم المستلم</label>
+              <input id="recName" type="text" required>
+              <p class="err" hidden>اكتب اسم المستلم.</p>
+            </div>
+            <div class="fld" id="fArea">
+              <label for="area">المنطقة في غزة</label>
+              <select id="area" required>
+                <option value="">اختر المنطقة</option>
+                <option>محافظة غزة</option>
+                <option>شمال غزة</option>
+                <option>دير البلح</option>
+                <option>خان يونس</option>
+                <option>رفح</option>
+              </select>
+              <p class="err" hidden>اختر المنطقة.</p>
+            </div>
+            <div class="fld" id="fCountry" hidden>
+              <label for="country">بلد التسليم</label>
+              <input id="country" type="text" required>
+              <p class="err" hidden>اكتب بلد التسليم.</p>
+            </div>
+          </div>
+          <div class="fld" id="fMsg">
+            <label for="msg">رسالة على بطاقة الهدية (اختياري)</label>
+            <textarea id="msg" maxlength="140"></textarea>
+            <p class="cnt" id="msgN">0 / 140</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="grp" id="gDist" hidden>
+          <legend>التوزيع</legend>
+          <div class="two">
+            <div class="fld">
+              <label for="count">عدد البوكسات</label>
+              <input id="count" type="number" inputmode="numeric" min="1" max="500" value="10" required>
+              <p class="err" hidden>اكتب عددًا لا يقل عن 1.</p>
+            </div>
+            <div class="fld">
+              <label for="areaD">المنطقة في غزة</label>
+              <select id="areaD" required>
+                <option value="">اختر المنطقة</option>
+                <option>محافظة غزة</option>
+                <option>شمال غزة</option>
+                <option>دير البلح</option>
+                <option>خان يونس</option>
+                <option>رفح</option>
+              </select>
+              <p class="err" hidden>اختر المنطقة.</p>
+            </div>
+          </div>
+          <div class="fld">
+            <label for="who">من تريد أن تصل إليهم البوكسات؟ (اختياري)</label>
+            <textarea id="who" placeholder="صِف الأسر أو الفئة التي تريد أن تصلها البوكسات"></textarea>
+          </div>
+          <label class="opt"><input type="checkbox" id="docs"><span>أرغب بتقرير توثيق بالصور، بموافقة المستفيدين فقط.</span></label>
+        </fieldset>
+
+        <p id="orderErr" class="err" role="alert" hidden></p>
+        <div class="submit">
+          <button class="btn primary" type="submit">أرسل الطلب التجريبي</button>
+          <p class="hint">نموذج تجريبي فقط؛ لا يُرسل الطلب ولا تُحفظ البيانات. الأسعار والتوفر قيد التأكيد.</p>
+        </div>
+      </form>
+
+      <div id="done" class="okbox" tabindex="-1" hidden></div>
+    </section>
+  </div>
+
+  <aside class="sum" aria-label="ملخص الطلب">
+    <h2>ملخص طلبك</h2>
+    <div id="sumBody" aria-live="polite"></div>
+  </aside>
+</main>
+
+<section class="how in" id="how">
+  <p class="kick">من الطلب إلى الباب</p>
+  <h2>كيف يصل بوكسك</h2>
+  <ol class="hsteps">
+    <li><b>نؤكد الطلب</b><p>نراجع توفر المنتجات والسعر والموعد المتوقع، ونتواصل معك قبل أي خطوة.</p></li>
+    <li><b>نجهّز البوكس</b><p>ننسّق مع المنتجين المحليين، ونفحص جودة المنتجات والتغليف.</p></li>
+    <li><b>نسلّم</b><p>داخل غزة أو بالشحن إلى الخارج بحسب الإمكانات المتاحة. لا نؤكد الشحن قبل التحقق من متطلبات الدخول.</p></li>
+    <li><b>نوثّق</b><p>بسجلات وصور مناسبة، وبموافقة الأشخاص المعنيين فقط.</p></li>
+  </ol>
+</section>
+
+<section class="trust in" id="trust">
+  <p class="kick">الثقة</p>
+  <h2>الشفافية والتوثيق بكرامة</h2>
+  <div class="tcols">
+    <div class="tc">
+      <h3>نحترم المستفيدين</h3>
+      <ul class="bul">
+        <li>توثيق الطلبات والتوزيع بسجلات وصور مناسبة</li>
+        <li>بموافقة الأشخاص المعنيين فقط</li>
+        <li>حفظ خصوصية المستفيدين وكرامتهم</li>
+        <li>وضوح المصدر والأسعار ومحتوى كل بوكس</li>
+      </ul>
+    </div>
+    <div class="tc soft">
+      <h3>التوزيع والشحن حسب الإمكانات</h3>
+      <ul class="bul">
+        <li>نعتمد على الإمكانات الفعلية المتاحة</li>
+        <li>نتحقق مسبقًا من متطلبات الدخول إلى الوجهة</li>
+        <li>لا نعرض الشحن كخدمة مضمونة قبل التحقق</li>
+        <li>نؤكد موعد التسليم المتوقع عند تأكيد الطلب</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="band" aria-hidden="true"></div>
+  <div class="in">
+    <p><strong>حِرفة</strong> · من غزة، بنكهة غزة، لأهل غزة.</p>
+    <p class="fs">نموذج أولي لمشروع تدريبي في التسويق الرقمي. الأسعار والتشكيلات تُحدَّد بعد دراسة السوق والتحقق من التوفر.</p>
+    <p class="fs">فريق العمل: فرح عرندس، يزن عرفات، غدير أبو معمر، ماريا العفيفي، وائل المصري، مي طبش.</p>
+  </div>
+</footer>
+
+<div class="bar" id="bar" hidden>
+  <div><span>اختيارك</span><strong id="barTotal"></strong></div>
+  <a class="btn primary sm" href="#order">إتمام الطلب</a>
+</div>
+
+</div>
+
+<script>
+(function(){
+  // tatreez diamond mask
+  var cells='';
+  for(var y=0;y<13;y++){for(var x=0;x<13;x++){
+    var dx=Math.abs(x-6),dy=Math.abs(y-6);
+    if(dx+dy===4||(dx<=1&&dy<=1)||((dx===0||dy===0)&&dx+dy>=5)){
+      cells+='<rect x="'+(x+2.07)+'" y="'+(y+2.07)+'" width=".86" height=".86"/>';
+    }
+  }}
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17">'+cells+'</svg>';
+  document.documentElement.style.setProperty('--motif','url("data:image/svg+xml,'+encodeURIComponent(svg)+'")');
+
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+
+  // products as listed in the project brief (no prices yet: set after the market study)
+  var P=[
+    {id:'zaatar',n:'الزعتر',c:'f'},
+    {id:'dukka',n:'الدقة البلدية',c:'f'},
+    {id:'oil',n:'زيت الزيتون',c:'f'},
+    {id:'honey',n:'العسل',c:'f'},
+    {id:'jam',n:'المربيات',c:'f'},
+    {id:'cheese',n:'الجبنة البيضاء',c:'f'},
+    {id:'maqdous',n:'المقدوس',c:'f'},
+    {id:'maamoul',n:'المعمول',c:'f'},
+    {id:'kaak',n:'الكعك البلدي',c:'f'},
+    {id:'embroidery',n:'مطرزات فلسطينية',c:'h',d:'محافظ ومفارش وإكسسوارات'},
+    {id:'crochet',n:'منتجات الكروشيه والصوف',c:'h'},
+    {id:'pottery',n:'الفخار والأواني المزخرفة يدويًا',c:'h'},
+    {id:'basket',n:'سلال القش',c:'h'},
+    {id:'soap',n:'الصابون البلدي',c:'h'},
+    {id:'candle',n:'الشموع المعطرة',c:'h'}
+  ];
+  // All boxes are assembled from the customer's own selection; products can be mixed across categories.
+  var SV={family:'أهدي عيلتي',distribute:'وزّعوا عني',custom:'صمّم على ذوقك'};
+  var byId={};P.forEach(function(p){byId[p.id]=p});
+  var st={svc:'family',items:{},budget:'',filter:'all',count:10,dest:'in'};
+
+  function units(it){return Object.keys(it).reduce(function(a,k){return a+it[k]},0)}
+  function mult(){return st.svc==='distribute'?Math.max(1,st.count||0):1}
+  function hasPick(){return units(st.items)>0}
+
+  function renderStep2(){
+    $('#presets').hidden=true;
+    $('#builder').hidden=false;
+    $('#s2title').textContent='كوّن بوكسك';
+    $('#s2sub').textContent=st.svc==='distribute'
+      ?'اختَر مزيج المنتجات الغذائية والحرفية الذي تريده، ثم حدّد عدد البوكسات. ستُجهّز البوكسات حسب اختياراتك والتوفر.'
+      :st.svc==='family'
+        ?'اجمع المنتجات الغذائية والحرفية التي تحبها في بوكس واحد. يمكنك اختيار النوعين معًا وتعديل الكميات.'
+        :'اختر المنتجات والكميات التي تناسب ذوقك وميزانيتك، ويمكنك الجمع بين المنتجات الغذائية والحرفية في البوكس نفسه.';
+  }
+
+  function renderPresets(){
+    // No fixed box types: every customer builds a box from the full product list.
+    $('#presets').innerHTML='';
+  }
+
+  function buildBuilder(){
+    $('#plist').innerHTML=P.map(function(p){
+      return '<li class="row" data-id="'+p.id+'" data-c="'+p.c+'"><div class="nm"><b>'+p.n+'</b><small>'+(p.c==='f'?'منتج غذائي بلدي':'حرف ومنتجات تراثية')+(p.d?' · '+p.d:'')+'</small></div>'+
+        '<div class="stp" role="group" aria-label="كمية '+p.n+'">'+
+        '<button type="button" data-act="qty" data-id="'+p.id+'" data-d="-1" aria-label="إنقاص '+p.n+'">−</button>'+
+        '<output data-q="'+p.id+'">0</output>'+
+        '<button type="button" data-act="qty" data-id="'+p.id+'" data-d="1" aria-label="زيادة '+p.n+'">+</button></div></li>';
+    }).join('');
+  }
+
+  function updBuilder(){
+    var it=st.items,u=units(it);
+    $$('#plist .row').forEach(function(r){
+      var id=r.dataset.id,q=it[id]||0;
+      $('output',r).textContent=q;
+      $('[data-d="-1"]',r).disabled=q===0;
+      r.hidden=!(st.filter==='all'||r.dataset.c===st.filter);
+    });
+    $$('[data-act="filter"]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.f===st.filter))});
+    $('#capMsg').textContent=u?'في بوكسك '+u+' قطع.':'بوكسك فارغ. أضف منتجًا من القائمة.';
+  }
+
+  function renderSum(){
+    var u=units(st.items),m=mult(),body;
+    if(!hasPick()){
+      body='<div class="empty"><span class="mark" aria-hidden="true"></span><p>لم تضف منتجات بعد. اختر من المنتجات الغذائية والحرفية لتكوين بوكسك الخاص.</p></div>';
+    }else{
+      var what='<ul class="lines">'+P.filter(function(p){return st.items[p.id]}).map(function(p){
+        return '<li><span>'+p.n+'</span><span>× '+st.items[p.id]+'</span></li>';
+      }).join('')+'</ul>';
+      body='<span class="svcline">'+SV[st.svc]+'</span><p class="bn">بوكس مخصص حسب اختياراتك</p>'+what+
+        (st.budget.trim()?'<div class="sr"><span>ميزانيتك</span><span>'+esc(st.budget.trim())+'</span></div>':'')+
+        (m>1?'<div class="sr"><span>عدد البوكسات</span><span>× '+m+'</span></div>':'')+
+        '<div class="sr"><span>السعر</span><span>يُحدَّد بعد تأكيد التوفر</span></div>'+ 
+        '<div class="sr"><span>الشحن والتوصيل</span><span>يُحدَّد عند التأكيد</span></div>'+ 
+        '<p class="small">يمكن الجمع بين المنتجات الغذائية والحرفية في البوكس نفسه. الأسعار والتوفر يُؤكَّدان قبل اعتماد الطلب.</p>';
+    }
+    $('#sumBody').innerHTML=body;
+    $('#bar').hidden=!hasPick();
+    $('#barTotal').textContent=hasPick()?u+' قطع':'';
+  }
+
+  function setVis(el,v){
+    el.hidden=!v;
+    $$('input,select,textarea',el).forEach(function(i){i.disabled=!v});
+  }
+  function updForm(){
+    var c=st.svc==='custom',f=st.svc==='family',d=st.svc==='distribute';
+    setVis($('#gDest'),c);
+    setVis($('#gRecipient'),f||c);
+    setVis($('#gDist'),d);
+    if(f||c){
+      setVis($('#fArea'),f||st.dest==='in');
+      setVis($('#fCountry'),c&&st.dest==='out');
+    }
+    $('#outNote').hidden=!(c&&st.dest==='out');
+  }
+
+  function renderAll(){renderStep2();renderPresets();updBuilder();renderSum();updForm()}
+
+  document.addEventListener('change',function(e){
+    var t=e.target;
+    if(t.name==='svc'){st.svc=t.value;renderAll()}
+    else if(t.name==='dest'){st.dest=t.value;updForm()}
+  });
+  document.addEventListener('input',function(e){
+    var t=e.target;
+    if(t.id==='budget'){st.budget=t.value;renderSum()}
+    else if(t.id==='count'){st.count=parseInt(t.value,10)||0;renderSum()}
+    else if(t.id==='msg'){$('#msgN').textContent=t.value.length+' / 140'}
+  });
+
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]');
+    if(!b)return;
+    var a=b.dataset.act,id=b.dataset.id;
+    if(a==='qty'){
+      var d=parseInt(b.dataset.d,10),q=Math.min(99,Math.max(0,(st.items[id]||0)+d));
+      if(q)st.items[id]=q;else delete st.items[id];
+      updBuilder();renderSum();
+    }else if(a==='filter'){
+      st.filter=b.dataset.f;updBuilder();
+    }else if(a==='again'){
+      $('#form').reset();
+      st.items={};st.filter='all';st.count=10;st.dest='in';st.budget='';
+      $('#budget').value='';
+      $('#done').hidden=true;$('#form').hidden=false;
+      $('#msgN').textContent='0 / 140';
+      renderAll();$('#service').scrollIntoView({block:'start'});
+    }
+  });
+
+  var form=$('#form');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var err=$('#orderErr'),bad=[];
+    err.hidden=true;
+    $$('.fld .err',form).forEach(function(p){p.hidden=true});
+    $$('[aria-invalid]',form).forEach(function(i){i.removeAttribute('aria-invalid')});
+    $$('.fld',form).forEach(function(f){
+      if(f.hidden||f.closest('[hidden]'))return;
+      var i=$('input,select,textarea',f);
+      if(!i||!i.required)return;
+      var empty=i.type==='number'?!(parseInt(i.value,10)>=1):!String(i.value).trim();
+      if(empty){i.setAttribute('aria-invalid','true');var p=$('.err',f);if(p)p.hidden=false;bad.push(i)}
+    });
+    var msg='';
+    if(st.svc==='distribute' && !(parseInt($('#count').value,10)>=1 && parseInt($('#count').value,10)<=500)){msg='عدد البوكسات يجب أن يكون بين 1 و500.';}
+    var contactValue=$('#contact').value.trim();
+    if(!msg && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactValue) || /^[+0-9()\s-]{7,}$/.test(contactValue))){msg='أدخل بريدًا إلكترونيًا صحيحًا أو رقم هاتف صالحًا للتواصل.';}
+    if(!msg && !hasPick())msg='أضف منتجًا واحدًا على الأقل إلى البوكس.';
+    if(msg){err.textContent=msg;err.hidden=false}
+    if(bad.length){bad[0].focus();return}
+    if(msg){$('#boxes').scrollIntoView({block:'start'});return}
+
+    var m=mult(),u=units(st.items);
+    var selected=P.filter(function(p){return st.items[p.id]}).map(function(p){return p.n+' × '+st.items[p.id]}).join('، ');
+    var rows='<li><span>الخدمة</span><span>'+SV[st.svc]+'</span></li>'+
+      '<li><span>محتويات البوكس</span><span>'+esc(selected)+'</span></li>'+
+      (m>1?'<li><span>عدد البوكسات</span><span>'+m+'</span></li>':'')+
+      '<li><span>السعر</span><span>يُحدَّد بعد تأكيد التوفر</span></li>';
+    var done=$('#done');
+    done.innerHTML='<span class="mark" aria-hidden="true"></span><h3>تم تسجيل طلبك التجريبي</h3>'+
+      '<p>هذه الصفحة نموذج أولي، لذلك لم يُرسل شيء. في المتجر الفعلي سنتواصل معك على <b dir="ltr">'+esc($('#contact').value.trim())+'</b> لنؤكد توفر المنتجات والسعر وموعد التسليم المتوقع قبل أي خطوة.</p>'+
+      '<ul class="lines">'+rows+'</ul>'+
+      '<div class="acts"><button type="button" class="btn ghost sm" data-act="again">طلب جديد</button><a class="link" href="#how">كيف يصل بوكسك</a></div>';
+    form.hidden=true;done.hidden=false;done.focus();
+    done.scrollIntoView({block:'center'});
+  });
+
+  buildBuilder();
+  renderAll();
+})();
+</script>
+
+</body></html>
